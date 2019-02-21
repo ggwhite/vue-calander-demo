@@ -2,17 +2,26 @@
   <div id="app" class="container">
     <h1 class="mt-4 mb-2 border-bottom">Calander</h1>
     <p>Selected Date: {{ c1selected | date }}</p>
-    <Calander @onSelect="changeC1"></Calander>
+    <div class="calander-demo container">
+      <Calander @onSelect="changeC1"></Calander>
+    </div>
+
+    <h1 class="mt-4 mb-2 border-bottom">DatePicker</h1>
+    <div class="datepicker-demo container">
+      <DatePicker></DatePicker>
+    </div>
   </div>
 </template>
 
 <script>
 import Calander from './components/Calander.vue'
+import DatePicker from './components/DatePicker.vue'
 
 export default {
   name: 'app',
   components: {
-    Calander
+    Calander,
+    DatePicker
   },
   data: function(){
     return {
@@ -22,9 +31,12 @@ export default {
   filters: {
     date: function(date) {
       if (!date) {
-        return "NaN"
+        return "";
       }
-      return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var date = date.getDate();
+      return ("000" + year).slice(-4) + "-" + ("0" + month).slice(-2) + "-" + ("0" + date).slice(-2);
     }
   },
   methods: {
@@ -45,8 +57,18 @@ export default {
   margin-top: 60px;
 }
 
-.calander {
-  margin: 0 auto;
+.calander-demo {
+  width: 600px;
+  padding: 30px;
+  .calander {
+    display: inline-block;
+  }
+}
+
+.datepicker-demo {
+  width: 600px;
   padding: 30px;
 }
+
+
 </style>

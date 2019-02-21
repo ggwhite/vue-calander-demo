@@ -1,32 +1,32 @@
 <template>
     <div class="calander">
         <div class="controller row">
-            <div class="col-2" @click="last">&lt;</div>
+            <div class="col-2" @click="last"><i class="fa fa-angle-left"></i></div>
             <div class="col-8">
                 <span v-show="mode == 'date'" @click="mode='month'">{{ current | month }} {{ current | year }}</span>
                 <span v-show="mode == 'month'" @click="mode='year'">{{ current | year }}</span>
                 <span v-show="mode == 'year'">{{ current | yearRange }}</span>
             </div>
-            <div class="col-2" @click="next">&gt;</div>
+            <div class="col-2" @click="next"><i class="fa fa-angle-right"></i></div>
         </div>
         <div class="datepicker" v-show="mode == 'date'">
             <div class="week-day" v-for="day in weeks" :key="day">{{ day }}</div>
             <div v-for="date in dates" :key="date.getTime()">
-                <span :class="{ gray : !isSameMonth(date, current), red: isSameDate(date, today) }" @click="pickDate(date)">
+                <span :class="{ gray : !isSameMonth(date, current), red: isSameDate(date, today), selected: isSameDate(date, selected) }" @click="pickDate(date)">
                     {{ date | date }}
                 </span>
             </div>
         </div>
         <div class="monthpicker" v-show="mode == 'month'">
             <div v-for="month in months" :key="month.getTime()">
-                <span :class="{ red : isSameMonth(month, today) }" @click="current = month; mode='date'">
+                <span :class="{ red : isSameMonth(month, today), selected: isSameMonth(month, selected) }" @click="current = month; mode='date'">
                     {{ month | month }}
                 </span>
             </div>
         </div>
         <div class="yearpicker" v-show="mode == 'year'">
             <div v-for="year in years" :key="year.getTime()">
-                <span :class="{ gray : !isSameRamge(year, current), red : isSameYear(year, today) }" @click="current = year; mode='month'">
+                <span :class="{ gray : !isSameRamge(year, current), red : isSameYear(year, today), selected: isSameYear(year, selected) }" @click="current = year; mode='month'">
                     {{ year | year }}
                 </span>
             </div>
@@ -43,10 +43,10 @@ export default {
         return {
             mode: "date", // date/month/year
             modes: ["date", "month", "year"],
+            selected: null,
             current: new Date(),
             today: new Date(),
             weeks: weeks,
-            // months: months,
         }
     },
     computed: {
@@ -130,15 +130,27 @@ export default {
     },
     methods: {
         isSameDate: function(d1, d2) {
+            if (!d1 || !d2) {
+                return false;
+            }
             return d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate();
         },
         isSameMonth: function(d1, d2) {
+            if (!d1 || !d2) {
+                return false;
+            }
             return d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth();
         },
         isSameYear: function(d1, d2) {
+            if (!d1 || !d2) {
+                return false;
+            }
             return d1.getFullYear() == d2.getFullYear();
         },
         isSameRamge: function(d1, d2) {
+            if (!d1 || !d2) {
+                return false;
+            }
             var current = d2.getFullYear();
             var begin = current - current%10;
             var end = begin + 9;
@@ -198,7 +210,15 @@ export default {
             this.current = d;
         },
         pickDate: function(date) {
+            this.selected = date;
             this.$emit('onSelect', date);
+            this.onSelect(date);
+        },
+        onSelect: function() {
+
+        },
+        date: function() {
+            return this.selected;
         },
     },
 }
@@ -207,16 +227,42 @@ export default {
 <style lang="less" scoped>
 @import '~font-awesome/css/font-awesome.min.css';
 
+@white: #ffffff;
+@gray: #eeeeee;
+@red: #db3d44;
+
 .calander {
-    
-    width: 500px;
-    border: 1px solid #555;
+    width: 400px;
+    border: 1px solid @gray;
+    box-shadow: 1px 1px 5px @gray;
+    text-align: center;
+    border-radius: 5px;
+    padding: 15px;
 
     .controller {
-        padding: 10px 5px;
+        padding: 5px 5px 10px 5px;
         div {
             cursor: pointer;
         }
+    }
+
+    .gray {
+        color: @gray;
+    }
+
+    .red {
+        color: @red;
+    }
+
+    .selected {
+        color: @white;
+        background-color: @red;
+    }
+
+    span {
+        padding: 5px 8px;
+        border-radius: 100%;
+        cursor: pointer;
     }
 
     .datepicker {
@@ -231,23 +277,9 @@ export default {
             padding: 5px;
         }
 
-        .gray {
-            color: #EEEEEE;
-        }
-
-        .red {
-            color: #FFF;
-            background-color: #ff1f05;
-        }
-
-        span {
-            padding: 5px 8px;
-            border-radius: 100%;
-            cursor: pointer;
-        }
     }
 
-    .monthpicker {
+    .monthpicker, .yearpicker {
         display: grid;
         grid-template-areas: "a b c d";
         
@@ -255,41 +287,8 @@ export default {
             padding: 20px 5px;
         }
 
-        .red {
-            color: #FFF;
-            background-color: #ff1f05;
-        }
-
-        span {
-            padding: 5px 8px;
-            border-radius: 100%;
-            cursor: pointer;
-        }
     }
 
-    .yearpicker {
-        display: grid;
-        grid-template-areas: "a b c d";
-        
-        div {
-            padding: 20px 5px;
-        }
-
-        .gray {
-            color: #EEEEEE;
-        }
-
-        .red {
-            color: #FFF;
-            background-color: #ff1f05;
-        }
-
-        span {
-            padding: 5px 8px;
-            border-radius: 100%;
-            cursor: pointer;
-        }
-    }
 }
 
 </style>
