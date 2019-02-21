@@ -4,7 +4,7 @@
             <i class="fa fa-calendar icon"></i>
             <input @click="open = !open" :value="datestr" />
         </div>
-        <Calander v-show="open" ref="calander" @onSelect="onSelect"></Calander>
+        <Calendar v-show="open" ref="calander" @onSelect="onSelect"></Calendar>
     </div>
 </template>
 
