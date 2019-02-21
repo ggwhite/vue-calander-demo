@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import Calander from './Calander.vue'
+import Calendar from './Calendar.vue'
 
 export default {
     name: "DatePicker",
     components: {
-        Calander,
+        Calendar,
     },
     data: function(){
         return {
@@ -71,7 +71,7 @@ export default {
         }
     }
 
-    .calander {
+    .calendar {
         position: absolute;
     }
 }

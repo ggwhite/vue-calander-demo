@@ -1,4 +1,4 @@
-# calander
+# vue-calendar-demo
 
 ## Project setup
 ```

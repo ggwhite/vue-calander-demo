@@ -1,5 +1,5 @@
 <template>
-    <div class="calander">
+    <div class="calendar">
         <div class="controller row">
             <div class="col-2" @click="last"><i class="fa fa-angle-left"></i></div>
             <div class="col-8">
@@ -38,7 +38,7 @@
 var weeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 export default {
-    name: "Calander",
+    name: "Calendar",
     data: function(){
         return {
             mode: "date", // date/month/year
@@ -231,7 +231,7 @@ export default {
 @gray: #eeeeee;
 @red: #db3d44;
 
-.calander {
+.calendar {
     width: 400px;
     border: 1px solid @gray;
     box-shadow: 1px 1px 5px @gray;

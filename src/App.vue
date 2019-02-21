@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="container">
-    <h1 class="mt-4 mb-2 border-bottom">Calander</h1>
+    <h1 class="mt-4 mb-2 border-bottom">Calendar</h1>
     <p>Selected Date: {{ c1selected | date }}</p>
-    <div class="calander-demo container">
-      <Calander @onSelect="changeC1"></Calander>
+    <div class="calendar-demo container">
+      <Calendar @onSelect="changeC1"></Calendar>
     </div>
 
     <h1 class="mt-4 mb-2 border-bottom">DatePicker</h1>
@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import Calander from './components/Calander.vue'
+import Calendar from './components/Calendar.vue'
 import DatePicker from './components/DatePicker.vue'
 
 export default {
   name: 'app',
   components: {
-    Calander,
+    Calendar,
     DatePicker
   },
   data: function(){
@@ -57,10 +57,10 @@ export default {
   margin-top: 60px;
 }
 
-.calander-demo {
+.calendar-demo {
   width: 600px;
   padding: 30px;
-  .calander {
+  .calendar {
     display: inline-block;
   }
 }
