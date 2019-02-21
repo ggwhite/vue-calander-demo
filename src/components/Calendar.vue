@@ -239,7 +239,7 @@ export default {
     border-radius: 5px;
     padding: 15px;
 
-    @media (max-width: 320px) {
+    @media (max-width: 480px) {
         width: 100%;
         padding: 5px;
     }

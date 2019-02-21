@@ -63,7 +63,7 @@ export default {
   .calendar {
     display: inline-block;
   }
-  @media (max-width: 320px) {
+  @media (max-width: 480px) {
     width: 100%;
     padding: 5px;
     text-align: left;
@@ -73,10 +73,15 @@ export default {
 .datepicker-demo {
   width: 600px;
   padding: 30px;
-  @media (max-width: 320px) {
+  @media (max-width: 480px) {
     width: 100%;
     padding: 5px;
     text-align: left;
+  }
+  .calendar {
+    @media (max-width: 480px) {
+      width: calc(100% - 40px);
+    }
   }
 }
 
