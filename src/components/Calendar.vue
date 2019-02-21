@@ -239,6 +239,11 @@ export default {
     border-radius: 5px;
     padding: 15px;
 
+    @media (max-width: 320px) {
+        width: 100%;
+        padding: 5px;
+    }
+
     .controller {
         padding: 5px 5px 10px 5px;
         div {
