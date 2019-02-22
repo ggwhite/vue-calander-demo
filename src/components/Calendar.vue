@@ -3,30 +3,30 @@
         <div class="controller row">
             <div class="col-2" @click="last"><i class="fa fa-angle-left"></i></div>
             <div class="col-8">
-                <span v-show="mode == 'date'" @click="mode='month'">{{ current | month }} {{ current | year }}</span>
-                <span v-show="mode == 'month'" @click="mode='year'">{{ current | year }}</span>
+                <span v-show="mode == 'date'" @click="switchMode('date', 'month')">{{ current | month }} {{ current | year }}</span>
+                <span v-show="mode == 'month'" @click="switchMode('month', 'year')">{{ current | year }}</span>
                 <span v-show="mode == 'year'">{{ current | yearRange }}</span>
             </div>
             <div class="col-2" @click="next"><i class="fa fa-angle-right"></i></div>
         </div>
-        <div class="datepicker" v-show="mode == 'date'">
+        <div class="datepicker animated" ref="datepicker" v-show="mode == 'date'">
             <div class="week-day" v-for="day in weeks" :key="day">{{ day }}</div>
             <div v-for="date in dates" :key="date.getTime()">
-                <span :class="{ gray : !isSameMonth(date, current), red: isSameDate(date, today), selected: isSameDate(date, selected) }" @click="pickDate(date)">
+                <span :class="{ gray : !isSameMonth(date, current), red: isSameDate(date, today), selected: isSameDate(date, selected) }" @click="pickDate(date);">
                     {{ date | date }}
                 </span>
             </div>
         </div>
-        <div class="monthpicker" v-show="mode == 'month'">
+        <div class="monthpicker animated" ref="monthpicker" v-show="mode == 'month'">
             <div v-for="month in months" :key="month.getTime()">
-                <span :class="{ red : isSameMonth(month, today), selected: isSameMonth(month, selected) }" @click="current = month; mode='date'">
+                <span :class="{ red : isSameMonth(month, today), selected: isSameMonth(month, selected) }" @click="current = month; switchMode('month', 'date')">
                     {{ month | month }}
                 </span>
             </div>
         </div>
-        <div class="yearpicker" v-show="mode == 'year'">
+        <div class="yearpicker animated" ref="yearpicker" v-show="mode == 'year'">
             <div v-for="year in years" :key="year.getTime()">
-                <span :class="{ gray : !isSameRamge(year, current), red : isSameYear(year, today), selected: isSameYear(year, selected) }" @click="current = year; mode='month'">
+                <span :class="{ gray : !isSameRamge(year, current), red : isSameYear(year, today), selected: isSameYear(year, selected) }" @click="current = year; switchMode('year', 'month')">
                     {{ year | year }}
                 </span>
             </div>
@@ -183,11 +183,21 @@ export default {
             var d = new Date(this.current);
             d.setMonth(d.getMonth() - 1);
             this.current = d;
+            this.$refs.datepicker.classList.add('slideInLeft');
+            var $this = this;
+            setTimeout(function(){
+                $this.$refs.datepicker.classList.remove('slideInLeft');
+            }, 200);
         },
         nextMonth: function() {
             var d = new Date(this.current);
             d.setMonth(d.getMonth() + 1);
             this.current = d;
+            this.$refs.datepicker.classList.add('slideInRight');
+            var $this = this;
+            setTimeout(function(){
+                $this.$refs.datepicker.classList.remove('slideInRight');
+            }, 200);
         },
         lastYear: function() {
             var d = new Date(this.current);
@@ -203,11 +213,52 @@ export default {
             var d = new Date(this.current);
             d.setFullYear(d.getFullYear() - 10);
             this.current = d;
+            this.$refs.yearpicker.classList.add('slideInLeft');
+            var $this = this;
+            setTimeout(function(){
+                $this.$refs.yearpicker.classList.remove('slideInLeft');
+            }, 200);
         },
         nextRange: function() {
             var d = new Date(this.current);
             d.setFullYear(d.getFullYear() + 10);
             this.current = d;
+            this.$refs.yearpicker.classList.add('slideInRight');
+            var $this = this;
+            setTimeout(function(){
+                $this.$refs.yearpicker.classList.remove('slideInRight');
+            }, 200);
+        },
+        switchMode: function(from, to) {
+            this.mode = to;
+            if (from == 'date' && to == 'month') {
+                this.$refs.monthpicker.classList.add('zoomIn');
+                var $this = this;
+                setTimeout(function(){
+                    $this.$refs.monthpicker.classList.remove('zoomIn');
+                }, 200);
+            }
+            if (from == 'month' && to == 'year') {
+                this.$refs.yearpicker.classList.add('zoomIn');
+                var $this = this;
+                setTimeout(function(){
+                    $this.$refs.yearpicker.classList.remove('zoomIn');
+                }, 200);
+            }
+            if (from == 'year' && to == 'month') {
+                this.$refs.monthpicker.classList.add('zoomIn');
+                var $this = this;
+                setTimeout(function(){
+                    $this.$refs.monthpicker.classList.remove('zoomIn');
+                }, 200);
+            }
+            if (from == 'month' && to == 'date') {
+                this.$refs.datepicker.classList.add('zoomIn');
+                var $this = this;
+                setTimeout(function(){
+                    $this.$refs.datepicker.classList.remove('zoomIn');
+                }, 200);
+            }
         },
         pickDate: function(date) {
             this.selected = date;
@@ -225,7 +276,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~font-awesome/css/font-awesome.min.css';
 
 @white: #ffffff;
 @gray: #eeeeee;
@@ -238,6 +288,7 @@ export default {
     text-align: center;
     border-radius: 5px;
     padding: 15px;
+    overflow: hidden;
 
     @media (max-width: 480px) {
         width: 100%;
@@ -273,6 +324,7 @@ export default {
     .datepicker {
         display: grid;
         grid-template-areas: "a b c d e f g";
+        animation-duration: 0.2s;
         
         .week-day {
             font-weight: bold;
@@ -287,6 +339,7 @@ export default {
     .monthpicker, .yearpicker {
         display: grid;
         grid-template-areas: "a b c d";
+        animation-duration: 0.2s;
         
         div {
             padding: 20px 5px;

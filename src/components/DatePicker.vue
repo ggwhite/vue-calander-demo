@@ -4,7 +4,7 @@
             <i class="fa fa-calendar icon"></i>
             <input @click="open = !open" :value="datestr" />
         </div>
-        <Calendar v-show="open" ref="calander" @onSelect="onSelect"></Calendar>
+        <Calendar v-show="open" ref="calander" class="animated fadeInDown" @onSelect="onSelect"></Calendar>
     </div>
 </template>
 
@@ -42,8 +42,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~font-awesome/css/font-awesome.min.css';
-
 @gray: #eeeeee;
 
 .datepicker {
@@ -73,6 +71,7 @@ export default {
 
     .calendar {
         position: absolute;
+        animation-duration: 0.2s;
     }
 }
 

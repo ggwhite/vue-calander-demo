@@ -48,6 +48,9 @@ export default {
 </script>
 
 <style lang="less">
+@import '~font-awesome/css/font-awesome.min.css';
+@import '~animate.css/animate.min.css';
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
