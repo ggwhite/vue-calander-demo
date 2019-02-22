@@ -1,8 +1,8 @@
 <template>
     <div class="datepicker">
-        <div class="input">
+        <div class="input" @click="open = !open">
             <i class="fa fa-calendar icon"></i>
-            <input @click="open = !open" :value="datestr" />
+            <input :value="datestr" ref="input" />
         </div>
         <Calendar v-show="open" ref="calander" class="animated fadeInDown" @onSelect="onSelect"></Calendar>
     </div>
@@ -20,6 +20,7 @@ export default {
         return {
             open: false,
             date: new Date(),
+            separator: "-",
         }
     },
     computed: {
@@ -30,7 +31,7 @@ export default {
             var year = this.date.getFullYear();
             var month = this.date.getMonth() + 1;
             var date = this.date.getDate();
-            return ("000" + year).slice(-4) + "-" + ("0" + month).slice(-2) + "-" + ("0" + date).slice(-2);
+            return ("000" + year).slice(-4) + this.separator + ("0" + month).slice(-2) + this.separator + ("0" + date).slice(-2);
         },
     },
     methods: {
@@ -50,6 +51,7 @@ export default {
     
     .input {
         position: relative;
+        cursor: pointer;
 
         .icon {
             position: absolute;
@@ -58,7 +60,6 @@ export default {
         }
 
         input {
-            cursor: pointer;
             width: 130px;
             min-height: 35px;
             border: 1px solid @gray;
