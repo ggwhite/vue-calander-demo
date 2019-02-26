@@ -3,14 +3,14 @@
         <div class="controller row">
             <div class="col-2" @click="last"><i class="fa fa-angle-left"></i></div>
             <div class="col-8">
-                <span v-show="mode == 'date'" @click="switchMode('date', 'month')">{{ current | month }} {{ current | year }}</span>
+                <span v-show="mode == 'date'" @click="switchMode('date', 'month')">{{ current | month(monthsStr) }} {{ current | year }}</span>
                 <span v-show="mode == 'month'" @click="switchMode('month', 'year')">{{ current | year }}</span>
                 <span v-show="mode == 'year'">{{ current | yearRange }}</span>
             </div>
             <div class="col-2" @click="next"><i class="fa fa-angle-right"></i></div>
         </div>
         <div class="datepicker animated" ref="datepicker" v-show="mode == 'date'">
-            <div class="week-day" v-for="day in weeks" :key="day">{{ day }}</div>
+            <div class="week-day" v-for="day in weeksStr" :key="day">{{ day }}</div>
             <div v-for="date in dates" :key="date.getTime()">
                 <span :class="{ gray : !isSameMonth(date, current), red: isSameDate(date, today), selected: isSameDate(date, selected) }" @click="pickDate(date);">
                     {{ date | date }}
@@ -20,7 +20,7 @@
         <div class="monthpicker animated" ref="monthpicker" v-show="mode == 'month'">
             <div v-for="month in months" :key="month.getTime()">
                 <span :class="{ red : isSameMonth(month, today), selected: isSameMonth(month, selected) }" @click="current = month; switchMode('month', 'date')">
-                    {{ month | month }}
+                    {{ month | month(monthsStr) }}
                 </span>
             </div>
         </div>
@@ -35,18 +35,25 @@
 </template>
 
 <script>
-var weeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 export default {
     name: "Calendar",
-    data: function(){
+    props: {
+        weeksStr: {
+            type: Array,
+            default: function() { return ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] },
+        },
+        monthsStr: {
+            type: Array,
+            default: function() { return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] },
+        },
+    },
+    data: () => {
         return {
             mode: "date", // date/month/year
             modes: ["date", "month", "year"],
             selected: null,
             current: new Date(),
             today: new Date(),
-            weeks: weeks,
         }
     },
     computed: {
@@ -95,7 +102,6 @@ export default {
             return ans;
         },
         years: function() {
-
             var begin = new Date(this.current);
             begin.setFullYear(begin.getFullYear() - begin.getFullYear()%10 - 1);
 
@@ -114,7 +120,7 @@ export default {
         date: function(date) {
             return date.getDate();
         },
-        month: function(date) {
+        month: function(date, months) {
             return months[date.getMonth()];
         },
         year: function(date) {
@@ -263,13 +269,12 @@ export default {
         pickDate: function(date) {
             this.selected = date;
             this.$emit('onSelect', date);
-            this.onSelect(date);
         },
-        onSelect: function() {
-
-        },
-        date: function() {
-            return this.selected;
+        date: function(date) {
+            if (!date) {
+                return this.selected;      
+            }
+            this.selected = date;
         },
     },
 }
@@ -332,6 +337,11 @@ export default {
 
         div {
             padding: 5px;
+        }
+
+        span {
+            width: 80%;
+            display: inline-block;
         }
 
     }

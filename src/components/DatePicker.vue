@@ -2,9 +2,9 @@
     <div class="datepicker">
         <div class="input" @click="open = !open">
             <i class="fa fa-calendar icon"></i>
-            <input :value="datestr" ref="input" />
+            <input :value="datestr" ref="input" @change="updateDate($event)" />
         </div>
-        <Calendar v-show="open" ref="calander" class="animated fadeInDown" @onSelect="onSelect"></Calendar>
+        <Calendar v-show="open" ref="calendar" class="animated fadeInDown" @onSelect="onSelect"></Calendar>
     </div>
 </template>
 
@@ -37,6 +37,18 @@ export default {
     methods: {
         onSelect: function(date) {
             this.date = date;
+        },
+        validate: function(str) {
+            return str.match('[0-9]{4}-[0-9]{2}-[0-9]{2}');
+        },
+        updateDate: function(e) {
+            if (!this.validate(e.target.value)) {
+                console.error('invalid date format');
+                e.target.value = this.datestr;
+                return;
+            }
+            this.date = new Date(e.target.value);
+            this.$refs.calendar.date(this.date);
         },
     },
 }

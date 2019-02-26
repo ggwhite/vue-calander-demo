@@ -1,9 +1,13 @@
 <template>
   <div id="app" class="container">
     <h1 class="mt-4 mb-2 border-bottom">Calendar</h1>
+    <div>
+      <button class="btn btn-primary m-2" @click="format('en')">English</button>
+      <button class="btn btn-primary m-2" @click="format('zh-tw')">中文</button>
+    </div>
     <p>Selected Date: {{ c1selected | date }}</p>
     <div class="calendar-demo container">
-      <Calendar @onSelect="changeC1"></Calendar>
+      <Calendar @onSelect="changeC1" :weeksStr="weeks" :monthsStr="months"></Calendar>
     </div>
 
     <h1 class="mt-4 mb-2 border-bottom">DatePicker</h1>
@@ -26,6 +30,18 @@ export default {
   data: function(){
     return {
       c1selected: null,
+      weeks: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+      months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      formats: {
+        'en': {
+          weeks: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+          months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        },
+        'zh-tw': {
+          weeks: ["日", "一", "二", "三", "四", "五", "六"],
+          months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+        },
+      },
     }
   },
   filters: {
@@ -43,6 +59,10 @@ export default {
     changeC1: function(date) {
       this.c1selected = date;
     },
+    format: function(key) {
+      this.weeks = this.formats[key].weeks;
+      this.months = this.formats[key].months;
+    }
   },
 }
 </script>
