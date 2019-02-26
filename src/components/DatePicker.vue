@@ -51,6 +51,9 @@ export default {
             this.$refs.calendar.date(this.date);
         },
     },
+    mounted: function() {
+        this.$refs.calendar.date(this.date);
+    }
 }
 </script>
 
